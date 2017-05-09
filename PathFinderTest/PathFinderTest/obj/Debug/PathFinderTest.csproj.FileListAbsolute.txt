@@ -1,0 +1,6 @@
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\bin\Debug\PathFinderTest.exe.config
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\bin\Debug\PathFinderTest.exe
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\bin\Debug\PathFinderTest.pdb
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.csprojResolveAssemblyReference.cache
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.exe
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.pdb
