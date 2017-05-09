@@ -65,7 +65,7 @@ namespace PathFinderTest
         private IList<Node> GetWalkableAdjacentLocations(Node location)
         {
             var adjecents = GetAdjacentLocations(location);
-            return adjecents.Where(x => x.IsWalkable && x.State != NodeState.Wall && x.State != NodeState.Walked).ToList();
+            return adjecents.Where(x => x.State != NodeState.Wall && x.State != NodeState.Walked).ToList();
         }
 
 

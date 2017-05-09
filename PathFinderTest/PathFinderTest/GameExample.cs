@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace PathFinderTest
 {
@@ -34,7 +35,6 @@ namespace PathFinderTest
             foreach (var wall in walls)
             {
                 Gameboard.NodeMap[wall.X, wall.Y].State = NodeState.Wall;
-                Gameboard.NodeMap[wall.X, wall.Y].IsWalkable = false;
             }
 
             // add start and end points

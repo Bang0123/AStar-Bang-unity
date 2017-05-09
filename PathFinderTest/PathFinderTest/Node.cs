@@ -11,7 +11,6 @@ namespace PathFinderTest
         private Node lastNode;
         public Point Point { get; set; }
         public NodeState State { get; set; }
-        public bool IsWalkable { get; set; }
         public float G { get; set; }
         public float H { get; set; }
         public Node ParentNode
@@ -19,14 +18,14 @@ namespace PathFinderTest
             get { return this.lastNode; }
             set
             {
-                this.lastNode = value;
-                this.G = this.lastNode.G + GetTraversalCost(this.Point, this.lastNode.Point);
+                lastNode = value;
+                G = lastNode.G + GetTraversalCost(Point, lastNode.Point);
             }
         }
 
         public float F
         {
-            get { return this.G + this.H; }
+            get { return G + H; }
         }
 
         public int X
@@ -44,7 +43,6 @@ namespace PathFinderTest
         public Node(int x, int y)
         {
             Point = new Point(x, y);
-            IsWalkable = true;
         }
 
         internal static float GetTraversalCost(Point location, Point otherLocation)
@@ -58,8 +56,8 @@ namespace PathFinderTest
     {
         public Point(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         public int X { get; set; }
