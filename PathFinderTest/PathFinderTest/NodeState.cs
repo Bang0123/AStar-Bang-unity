@@ -9,6 +9,6 @@ namespace PathFinderTest
     public enum NodeState
     {
         Wall, Path, Start, End,
-        Walked
+        Walked, Open, Closed, Untested
     }
 }

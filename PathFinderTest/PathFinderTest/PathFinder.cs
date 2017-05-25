@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,71 +9,92 @@ namespace PathFinderTest
 {
     public class PathFinder
     {
-        public Gameboard Gameboard { get; set; }
+        private Gameboard Gameboard { get; }
 
         public PathFinder(Gameboard gb)
         {
-            this.Gameboard = gb;
+            Gameboard = gb;
+            Gameboard.StartNode.State = NodeState.Open;
         }
 
         public void FindPath()
         {
-            // find the shortest path from node.Start to node.End
-            List<Node> pathClosed = new List<Node>();
             var cPoint = Gameboard.NodeMap[Gameboard.StartNode.X, Gameboard.StartNode.Y];
+            var spResult = SearchPath(cPoint);
             float cost = 0;
-            while (true)
+            if (spResult)
             {
-                if (cPoint.X == Gameboard.EndNode.X && cPoint.Y == Gameboard.EndNode.Y)
-                {
-                    break;
-                }
-                var currentDistanceToEnd = Node.GetTraversalCost(Gameboard.NodeMap[cPoint.X, cPoint.Y].Point, Gameboard.EndNode.Point);
-                cost += currentDistanceToEnd;
-
-                var adjecents = GetWalkableAdjacentLocations(cPoint);
-
-                foreach (var node in adjecents)
-                {
-                    node.G = Node.GetTraversalCost(node.Point, cPoint.Point);
-                    if (node.H == 0)
-                    {
-                        node.H = Node.GetTraversalCost(node.Point, Gameboard.EndNode.Point);
-                    }
-                    
-                }
-                try
-                {
-                    var closest = adjecents.Min(x => x.F);
-                    //adjecents.ToList().Sort((node1, node2) => node1.F.CompareTo(node2.F));
-                    var chosenpath = adjecents.First(x => x.F == closest);
-                    if (chosenpath.State == NodeState.End)
-                    {
-                        break;
-                    }
-                    chosenpath.State = NodeState.Walked;
-                    pathClosed.Add(chosenpath);
-                    cPoint = chosenpath;
-                }
-                catch (Exception)
-                {
-                    break;
-                }
+                cost += BackTrack(Gameboard.EndNode);
             }
             Console.WriteLine("Total cost of route: " + cost);
         }
 
-        private IList<Node> GetWalkableAdjacentLocations(Node location)
+        private bool SearchPath(Node location)
         {
-            var adjecents = GetAdjacentLocations(location);
-            return adjecents.Where(x => x.State != NodeState.Wall && x.State != NodeState.Walked).ToList();
+            location.State = NodeState.Closed;
+            var adjecents = GetWalkableAdjacentLocations(location);
+            adjecents.Sort((node1, node2) => node1.F.CompareTo(node2.F));
+            foreach (var node in adjecents)
+            {
+                if (node.PrintState == NodeState.End)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (SearchPath(node))
+                    {
+                        return true;
+                    }
+                }
+            }
+            // No solution
+            return false;
         }
 
+        private float BackTrack(Node node)
+        {
+            var endCost = node.G;
+            while (node.ParentNode != null)
+            {
+                node.PrintState = NodeState.Walked;
+                node = node.ParentNode;
+            }
+            return endCost;
+        }
 
-        private IList<Node> GetAdjacentLocations(Node location)
+        private List<Node> GetWalkableAdjacentLocations(Node location)
+        {
+            var adjecents = GetAdjacentLocations(location).Where(x => x.PrintState != NodeState.Wall && x.State != NodeState.Closed).ToList();
+            var rList = new List<Node>();
+            foreach (var node in adjecents)
+            {
+                if (node.State == NodeState.Open)
+                {
+                    var gCost = location.G + Node.GetTraversalCost(node.Point, location.Point);
+                    if (gCost < node.G)
+                    {
+                        node.ParentNode = location;
+                        rList.Add(node);
+                    }
+                }
+                else
+                {
+                    node.ParentNode = location;
+                    node.State = NodeState.Open;
+                    rList.Add(node);
+                }
+                if (node.H == 0)
+                {
+                    node.H = Node.GetTraversalCost(node.Point, Gameboard.EndNode.Point);
+                }
+            }
+            return rList;
+        }
+
+        private IEnumerable<Node> GetAdjacentLocations(Node location)
         {
             var nl = new List<Node>();
-
             try
             {
                 nl.Add(Gameboard.NodeMap[location.X - 1, location.Y - 1]);
@@ -137,8 +159,6 @@ namespace PathFinderTest
             {
                 // ignored
             }
-
-
             return nl;
         }
     }

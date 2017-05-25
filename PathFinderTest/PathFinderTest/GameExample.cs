@@ -8,64 +8,50 @@ namespace PathFinderTest
 {
     public class GameExample
     {
-        private int length = 12;
-        private int height = 8;
-        public Gameboard Gameboard { get; set; }
-
-        // remember that
-        private Node startPoint = new Node(2, 2);
-        private Node endPoint = new Node(6, 8);
-        private List<Node> walls = new List<Node>() { new Node(4, 6), new Node(3, 6), new Node(4, 5),  new Node(2, 6) };
-
+        private const int Length = 12;
+        private const int Height = 8;
+        private Gameboard Gameboard { get; }
+        private static readonly Node StartPoint = new Node(2, 2);
+        private static readonly Node EndPoint = new Node(6, 8);
+        private static readonly List<Node> Walls = new List<Node>() { new Node(4, 6), new Node(3, 6), new Node(4, 5), new Node(2, 6) };
 
         public GameExample()
         {
-            // fill board with empty spaces
-            Gameboard = new Gameboard(new Node[height, length], startPoint, endPoint);
-
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < length; j++)
-                {
-                    Gameboard.NodeMap[i, j] = new Node(i, j) { State = NodeState.Path };
-                }
-            }
-
-            // add walls
-            foreach (var wall in walls)
-            {
-                Gameboard.NodeMap[wall.X, wall.Y].State = NodeState.Wall;
-            }
-
-            // add start and end points
-            Gameboard.NodeMap[startPoint.X, startPoint.Y].State = NodeState.Start;
-            Gameboard.NodeMap[endPoint.X, endPoint.Y].State = NodeState.End;
+            var nodeMap = GetNodeMap(Height, Length);
+            Gameboard = new Gameboard(nodeMap, StartPoint, EndPoint, Walls);
             var pathfinder = new PathFinder(Gameboard);
             pathfinder.FindPath();
         }
 
-
-        
-
-        
+        private static Node[,] GetNodeMap(int height, int length)
+        {
+            var nodeMap = new Node[height, length];
+            for (var i = 0; i < height; i++)
+            {
+                for (var j = 0; j < length; j++)
+                {
+                    nodeMap[i, j] = new Node(i, j) { PrintState = NodeState.Path };
+                }
+            }
+            return nodeMap;
+        }
 
         public override string ToString()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < height; i++)
+            var stringBuilder = new StringBuilder();
+            for (var i = 0; i < Height; i++)
             {
-                for (int j = 0; j < length; j++)
+                for (var j = 0; j < Length; j++)
                 {
-                    if (Gameboard.NodeMap[i, j].State == NodeState.Path) stringBuilder.Append((char)183);
-                    if (Gameboard.NodeMap[i, j].State == NodeState.Wall) stringBuilder.Append((char)219);
-                    if (Gameboard.NodeMap[i, j].State == NodeState.Start) stringBuilder.Append("S");
-                    if (Gameboard.NodeMap[i, j].State == NodeState.End) stringBuilder.Append("E");
-                    if (Gameboard.NodeMap[i, j].State == NodeState.Walked) stringBuilder.Append("W");
+                    if (Gameboard.NodeMap[i, j].PrintState == NodeState.Path) stringBuilder.Append((char)183);
+                    if (Gameboard.NodeMap[i, j].PrintState == NodeState.Wall) stringBuilder.Append((char)219);
+                    if (Gameboard.NodeMap[i, j].PrintState == NodeState.Start) stringBuilder.Append("S");
+                    if (Gameboard.NodeMap[i, j].PrintState == NodeState.End) stringBuilder.Append("E");
+                    if (Gameboard.NodeMap[i, j].PrintState == NodeState.Walked) stringBuilder.Append("W");
                 }
                 stringBuilder.Append(Environment.NewLine);
             }
             return stringBuilder.ToString();
-
         }
     }
 }

@@ -8,18 +8,19 @@ namespace PathFinderTest
 {
     public class Node
     {
-        private Node lastNode;
-        public Point Point { get; set; }
+        private Node _lastNode;
+        public Point Point { get; }
         public NodeState State { get; set; }
+        public NodeState PrintState { get; set; }
         public float G { get; set; }
         public float H { get; set; }
         public Node ParentNode
         {
-            get { return this.lastNode; }
+            get { return _lastNode; }
             set
             {
-                lastNode = value;
-                G = lastNode.G + GetTraversalCost(Point, lastNode.Point);
+                _lastNode = value;
+                G = _lastNode.G + GetTraversalCost(Point, _lastNode.Point);
             }
         }
 
@@ -43,9 +44,10 @@ namespace PathFinderTest
         public Node(int x, int y)
         {
             Point = new Point(x, y);
+            State = NodeState.Untested;
         }
 
-        internal static float GetTraversalCost(Point location, Point otherLocation)
+        public static float GetTraversalCost(Point location, Point otherLocation)
         {
             float deltaX = otherLocation.X - location.X;
             float deltaY = otherLocation.Y - location.Y;
