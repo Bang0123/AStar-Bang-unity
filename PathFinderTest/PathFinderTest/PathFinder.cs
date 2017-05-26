@@ -32,7 +32,7 @@ namespace PathFinderTest
             {
                 cost += BackTrack(Gameboard.EndNode);
             }
-            Console.WriteLine("Total cost of route: " + cost);
+            Console.WriteLine($"Total cost of route: {cost}");
         }
 
         /// <summary>
