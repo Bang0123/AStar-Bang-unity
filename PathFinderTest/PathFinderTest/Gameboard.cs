@@ -13,7 +13,15 @@ namespace PathFinderTest
         public Node EndNode { get; }
         public Node[,] NodeMap { get; }
         private List<Node> Walls { get; }
-        public Gameboard(Node[,] nodeMap, Node startNode, Node endNode, List<Node> wallsList)
+
+        /// <summary>
+        /// Gameboard constructor
+        /// </summary>
+        /// <param name="nodeMap">Node map to search through</param>
+        /// <param name="startNode">Starting node</param>
+        /// <param name="endNode">Ending node</param>
+        /// <param name="wallsList">list of walls</param>
+        public Gameboard(Node[,] nodeMap, Node startNode, Node endNode, List<Node> wallsList = null)
         {
             NodeMap = nodeMap;
             StartNode = NodeMap[startNode.X, startNode.Y];
@@ -23,8 +31,17 @@ namespace PathFinderTest
             Walls = wallsList;
             AddWalls(wallsList);
         }
+
+        /// <summary>
+        /// Add walls to the nodemap
+        /// </summary>
+        /// <param name="walls">list of walls to be added</param>
         private void AddWalls(IEnumerable<Node> walls)
         {
+            if (walls == null)
+            {
+                return;
+            }
             foreach (var wall in walls)
             {
                 NodeMap[wall.X, wall.Y].PrintState = NodeState.Wall;

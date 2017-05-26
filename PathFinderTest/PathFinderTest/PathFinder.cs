@@ -11,12 +11,19 @@ namespace PathFinderTest
     {
         private Gameboard Gameboard { get; }
 
+        /// <summary>
+        /// Constructor for pathfinder object
+        /// </summary>
+        /// <param name="gb">Gameboard Object with all prop filled</param>
         public PathFinder(Gameboard gb)
         {
             Gameboard = gb;
             Gameboard.StartNode.State = NodeState.Open;
         }
 
+        /// <summary>
+        /// Start A* search algorithm
+        /// </summary>
         public void FindAStarPath()
         {
             var startNode = Gameboard.StartNode;
@@ -29,6 +36,11 @@ namespace PathFinderTest
             Console.WriteLine("Total cost of route: " + cost);
         }
 
+        /// <summary>
+        /// Search for end from given node
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns>returns true if solution found for node else dead end</returns>
         private bool SearchAStarPath(Node location)
         {
             location.State = NodeState.Closed;
@@ -52,6 +64,11 @@ namespace PathFinderTest
             return false;
         }
 
+        /// <summary>
+        /// Backtracks to make it visible what path A* calculated 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private float BackTrack(Node node)
         {
             var endCost = node.G;
@@ -63,6 +80,11 @@ namespace PathFinderTest
             return endCost;
         }
 
+        /// <summary>
+        /// Get All adjacent nodes if they can be traversed
+        /// </summary>
+        /// <param name="location">Current node</param>
+        /// <returns>List of nodes that can be traversed</returns>
         private List<Node> GetWalkableAdjacentLocations(Node location)
         {
             var adjecents = GetAdjacentLocations(location).Where(x => x.PrintState != NodeState.Wall && x.State != NodeState.Closed).ToList();
@@ -92,6 +114,11 @@ namespace PathFinderTest
             return rList;
         }
 
+        /// <summary>
+        /// Get All adjacent nodes if they exist with gameboard
+        /// </summary>
+        /// <param name="location">Location from where you want adjacent nodes</param>
+        /// <returns></returns>
         private IEnumerable<Node> GetAdjacentLocations(Node location)
         {
             var nl = new List<Node>();

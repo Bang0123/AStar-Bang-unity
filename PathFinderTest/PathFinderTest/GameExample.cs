@@ -15,6 +15,9 @@ namespace PathFinderTest
         private static readonly Node EndPoint = new Node(6, 8);
         private static readonly List<Node> Walls = new List<Node>() { new Node(4, 6), new Node(3, 6), new Node(4, 5), new Node(2, 6) };
 
+        /// <summary>
+        /// Constructor for the Example
+        /// </summary>
         public GameExample()
         {
             var nodeMap = GetNodeMap(Height, Length);
@@ -23,6 +26,12 @@ namespace PathFinderTest
             pathfinder.FindAStarPath();
         }
 
+        /// <summary>
+        /// Get a nodemap of height and length
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="length"></param>
+        /// <returns>2d node map with printstate path</returns>
         private static Node[,] GetNodeMap(int height, int length)
         {
             var nodeMap = new Node[height, length];
@@ -36,6 +45,10 @@ namespace PathFinderTest
             return nodeMap;
         }
 
+        /// <summary>
+        /// Overridden tostring method
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
