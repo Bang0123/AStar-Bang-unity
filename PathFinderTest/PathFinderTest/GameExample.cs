@@ -20,7 +20,7 @@ namespace PathFinderTest
             var nodeMap = GetNodeMap(Height, Length);
             Gameboard = new Gameboard(nodeMap, StartPoint, EndPoint, Walls);
             var pathfinder = new PathFinder(Gameboard);
-            pathfinder.FindPath();
+            pathfinder.FindAStarPath();
         }
 
         private static Node[,] GetNodeMap(int height, int length)

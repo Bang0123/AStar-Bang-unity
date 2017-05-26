@@ -17,10 +17,10 @@ namespace PathFinderTest
             Gameboard.StartNode.State = NodeState.Open;
         }
 
-        public void FindPath()
+        public void FindAStarPath()
         {
             var startNode = Gameboard.StartNode;
-            var spResult = SearchPath(startNode);
+            var spResult = SearchAStarPath(startNode);
             float cost = 0;
             if (spResult)
             {
@@ -29,7 +29,7 @@ namespace PathFinderTest
             Console.WriteLine("Total cost of route: " + cost);
         }
 
-        private bool SearchPath(Node location)
+        private bool SearchAStarPath(Node location)
         {
             location.State = NodeState.Closed;
             var adjecents = GetWalkableAdjacentLocations(location);
@@ -42,7 +42,7 @@ namespace PathFinderTest
                 }
                 else
                 {
-                    if (SearchPath(node))
+                    if (SearchAStarPath(node))
                     {
                         return true;
                     }
