@@ -26,9 +26,8 @@ namespace PathFinderTest
         /// </summary>
         public void FindAStarPath()
         {
-            var startNode = Gameboard.StartNode;
             float cost = 0;
-            if (SearchAStarPath(startNode))
+            if (SearchAStarPath(Gameboard.StartNode))
             {
                 cost += BackTrack(Gameboard.EndNode);
             }
@@ -51,12 +50,9 @@ namespace PathFinderTest
                 {
                     return true;
                 }
-                else
+                if (SearchAStarPath(node))
                 {
-                    if (SearchAStarPath(node))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             // No solution
