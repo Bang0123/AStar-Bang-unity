@@ -19,8 +19,8 @@ namespace PathFinderTest
 
         public void FindPath()
         {
-            var cPoint = Gameboard.NodeMap[Gameboard.StartNode.X, Gameboard.StartNode.Y];
-            var spResult = SearchPath(cPoint);
+            var startNode = Gameboard.StartNode;
+            var spResult = SearchPath(startNode);
             float cost = 0;
             if (spResult)
             {

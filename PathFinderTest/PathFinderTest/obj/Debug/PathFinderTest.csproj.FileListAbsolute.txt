@@ -3,3 +3,4 @@ C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderT
 C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\bin\Debug\PathFinderTest.pdb
 C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.exe
 C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.pdb
+C:\Users\NBN\Desktop\skrivebords\C# SkoleSjav\Unity\AStarBangProject\PathFinderTest\PathFinderTest\obj\Debug\PathFinderTest.csprojResolveAssemblyReference.cache
