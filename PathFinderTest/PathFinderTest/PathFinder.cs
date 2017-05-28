@@ -66,13 +66,14 @@ namespace PathFinderTest
         /// <returns></returns>
         private float BackTrack(Node node)
         {
-            var endCost = node.G;
+            var endnode = node;
             while (node.ParentNode != null)
             {
                 node.PrintState = NodeState.Walked;
                 node = node.ParentNode;
             }
-            return endCost;
+            endnode.PrintState = NodeState.End;
+            return endnode.G;
         }
 
         /// <summary>
