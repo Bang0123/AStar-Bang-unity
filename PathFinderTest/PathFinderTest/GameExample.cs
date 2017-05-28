@@ -11,9 +11,12 @@ namespace PathFinderTest
         private const int Length = 12;
         private const int Height = 8;
         private Gameboard Gameboard { get; }
-        private static readonly Node StartPoint = new Node(2, 2);
-        private static readonly Node EndPoint = new Node(6, 8);
-        private static readonly List<Node> Walls = new List<Node>() { new Node(4, 6), new Node(3, 6), new Node(4, 5), new Node(2, 6) };
+        //private static readonly Node StartPoint = new Node(2, 2);
+        //private static readonly Node EndPoint = new Node(6, 8);
+        //private static readonly List<Node> Walls = new List<Node>() { new Node(4, 6), new Node(3, 6), new Node(4, 5), new Node(2, 6) };
+        private static readonly Node StartPoint = new Node(1, 11);
+        private static readonly Node EndPoint = new Node(6, 2);
+        private static readonly List<Node> Walls = new List<Node>() { new Node(4, 2), new Node(4, 1), new Node(4, 0), new Node(4, 3), new Node(4, 4), new Node(4, 5), new Node(4, 6), new Node(4, 7), new Node(4, 8), new Node(4, 9) };
 
         /// <summary>
         /// Constructor for the Example
