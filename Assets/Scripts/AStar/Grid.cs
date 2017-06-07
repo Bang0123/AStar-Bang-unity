@@ -42,10 +42,8 @@ public class Grid : MonoBehaviour
 
     public Node NodeFromWorldPos(Vector3 worldpos)
     {
-        //float percentX = Mathf.Clamp01(worldpos.x /GridWorldSize.x + .5f);
-        //float percentY = Mathf.Clamp01(worldpos.z / GridWorldSize.y +.5f);
-        float percentX = (worldpos.x - transform.position.x) / GridWorldSize.x + 0.5f - (NodeRadius / GridWorldSize.x);
-        float percentY = (worldpos.z - transform.position.z) / GridWorldSize.y + 0.5f - (NodeRadius / GridWorldSize.y);
+        float percentX = Mathf.Clamp01(worldpos.x /GridWorldSize.x + .5f);
+        float percentY = Mathf.Clamp01(worldpos.z / GridWorldSize.y +.5f);
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
