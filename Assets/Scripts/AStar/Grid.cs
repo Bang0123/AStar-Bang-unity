@@ -8,6 +8,7 @@ public class Grid : MonoBehaviour
     public Vector2 GridWorldSize;
     public float NodeRadius;
     public LayerMask UnwalkableMask;
+    public LayerMask ExpensiveMask;
     public List<Node> Path;
     private Node[,] grid;
     private float nodeDiameter;
@@ -35,7 +36,8 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.forward * (y * nodeDiameter + NodeRadius);
                 bool walkable = !Physics.CheckSphere(worldPoint, NodeRadius, UnwalkableMask);
-                grid[x, y] = new Node(walkable, worldPoint, x, y);
+                bool expensive = Physics.CheckSphere(worldPoint, NodeRadius, ExpensiveMask);
+                grid[x, y] = new Node(walkable, worldPoint, x, y , expensive);
             }
         }
     }
@@ -81,7 +83,10 @@ public class Grid : MonoBehaviour
             foreach (var node in grid)
             {
                 Gizmos.color = node.Walkable ? Color.green : Color.red;
-
+                if (node.Expensive)
+                {
+                    Gizmos.color = Color.yellow;
+                }
                 if (playerNode == node)
                 {
                     Gizmos.color = Color.black;

@@ -8,14 +8,16 @@ public class Node
     public int G, H;
     public int GridX, GridY;
     public Vector3 WorldPosition;
+    public bool Expensive;
     private Node _parent;
 
-    public Node(bool walkable, Vector3 worldPos, int gridx, int gridy)
+    public Node(bool walkable, Vector3 worldPos, int gridx, int gridy, bool expensive)
     {
         Walkable = walkable;
         WorldPosition = worldPos;
         GridX = gridx;
         GridY = gridy;
+        Expensive = expensive;
     }
 
     public int F

@@ -54,7 +54,7 @@ public class PathFinder : MonoBehaviour
                 if (newCostToNeighbour < adjNode.G || !openNodes.Contains(adjNode))
                 {
                     adjNode.G = newCostToNeighbour;
-                    adjNode.H = GetTraversalCost(adjNode, targetNode);
+                    adjNode.H = !adjNode.Expensive ? GetTraversalCost(adjNode, targetNode) : 500 + GetTraversalCost(adjNode, targetNode);
                     adjNode.Parent = node;
 
                     if (!openNodes.Contains(adjNode))
