@@ -25,7 +25,6 @@ public class PathFinder : MonoBehaviour
         List<Node> openNodes = new List<Node>();
         HashSet<Node> closedNodes = new HashSet<Node>();
         openNodes.Add(startNode);
-
         while (openNodes.Count > 0)
         {
             Node node = openNodes[0];
@@ -47,14 +46,14 @@ public class PathFinder : MonoBehaviour
             foreach (var adjNode in grid.GetAdjacentLocations(node))
             {
                 if (!adjNode.Walkable || closedNodes.Contains(adjNode))
-                {
                     continue;
-                }
                 int newCostToNeighbour = node.G + GetTraversalCost(node, adjNode);
                 if (newCostToNeighbour < adjNode.G || !openNodes.Contains(adjNode))
                 {
                     adjNode.G = newCostToNeighbour;
-                    adjNode.H = !adjNode.Expensive ? GetTraversalCost(adjNode, targetNode) : Mathf.RoundToInt((grid.GridWorldSize.x * grid.GridWorldSize.y)*.65f) + GetTraversalCost(adjNode, targetNode);
+                    adjNode.H = !adjNode.Expensive ? GetTraversalCost(adjNode, targetNode) :
+                        Mathf.RoundToInt(grid.GridWorldSize.x * grid.GridWorldSize.y * .65f)
+                        + GetTraversalCost(adjNode, targetNode);
                     adjNode.Parent = node;
 
                     if (!openNodes.Contains(adjNode))
@@ -68,16 +67,13 @@ public class PathFinder : MonoBehaviour
     {
         List<Node> path = new List<Node>();
         Node currentNode = endNode;
-
         while (currentNode != startNode)
         {
             path.Add(currentNode);
             currentNode = currentNode.Parent;
         }
         path.Reverse();
-
         grid.Path = path;
-
     }
     // Manhatten distance
     int GetTraversalCost(Node nodeA, Node nodeB)

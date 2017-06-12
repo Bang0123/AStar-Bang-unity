@@ -34,7 +34,8 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.forward * (y * nodeDiameter + NodeRadius);
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) 
+                    + Vector3.forward * (y * nodeDiameter + NodeRadius);
                 bool walkable = !Physics.CheckSphere(worldPoint, NodeRadius, UnwalkableMask);
                 bool expensive = Physics.CheckSphere(worldPoint, NodeRadius, ExpensiveMask);
                 grid[x, y] = new Node(walkable, worldPoint, x, y , expensive);
@@ -50,16 +51,11 @@ public class Grid : MonoBehaviour
             for (int y = -1; y <= 1; y++)
             {
                 if (x == 0 && y == 0)
-                {
                     continue;
-                }
-
                 int checkX = node.GridX + x;
                 int checkY = node.GridY + y;
                 if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
-                {
                     adjecents.Add(grid[checkX, checkY]);
-                }
             }
         }
         return adjecents;
@@ -84,13 +80,9 @@ public class Grid : MonoBehaviour
             {
                 Gizmos.color = node.Walkable ? Color.green : Color.red;
                 if (node.Expensive)
-                {
                     Gizmos.color = Color.yellow;
-                }
                 if (playerNode == node)
-                {
                     Gizmos.color = Color.black;
-                }
                 if (Path != null)
                     if (Path.Contains(node))
                         Gizmos.color = Color.blue;
@@ -98,5 +90,4 @@ public class Grid : MonoBehaviour
             }
         }
     }
-
 }
