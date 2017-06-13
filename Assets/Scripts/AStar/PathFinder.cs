@@ -7,65 +7,78 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     public Transform Seeker, Target;
+    private PathManager pathManager;
     private Grid grid;
 
     void Awake()
     {
+        pathManager = GetComponent<PathManager>();
         grid = GetComponent<Grid>();
     }
 
-    void Update()
+    //void Update()
+    //{
+    //    if (Input.GetButtonDown("Jump"))
+    //    {
+    //        FindAStarPath(Seeker.position, Target.position);
+    //    }
+    //}
+
+    public void StartFindAStarPath(Vector3 startPos, Vector3 targetPos)
     {
-        if (Input.GetButtonDown("Jump"))
-        {
-            FindAStarPath(Seeker.position, Target.position);
-        }
+        StartCoroutine(FindAStarPath(startPos, targetPos));
     }
 
-    public void FindAStarPath(Vector3 startPos, Vector3 targetPos)
+    public IEnumerator FindAStarPath(Vector3 startPos, Vector3 targetPos)
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
+        Vector3[] waypoints = new Vector3[0];
+        bool pathSuccess = false;
         Node startNode = grid.GetNodeFromWorldPos(startPos);
         Node targetNode = grid.GetNodeFromWorldPos(targetPos);
-        Heap<Node> openNodes = new Heap<Node>(grid.MaxSize);
-        HashSet<Node> closedNodes = new HashSet<Node>();
-        openNodes.Add(startNode);
-        while (openNodes.Count > 0)
+        if (startNode.Walkable && targetNode.Walkable)
         {
-            Node node = openNodes.RemoveFirst();
-            closedNodes.Add(node);
-            if (node == targetNode)
+            Heap<Node> openNodes = new Heap<Node>(grid.MaxSize);
+            HashSet<Node> closedNodes = new HashSet<Node>();
+            openNodes.Add(startNode);
+            while (openNodes.Count > 0)
             {
-                stopwatch.Stop();
-                print("Path found in " + stopwatch.ElapsedMilliseconds + " ms");
-                RetracePath(startNode, targetNode);
-                return;
-            }
-            foreach (var adjNode in grid.GetAdjacentLocations(node))
-            {
-                if (!adjNode.Walkable || closedNodes.Contains(adjNode))
-                    continue;
-                int newCostToNeighbour = node.G + GetTraversalCost(node, adjNode);
-                if (newCostToNeighbour < adjNode.G || !openNodes.Contains(adjNode))
+                Node node = openNodes.RemoveFirst();
+                closedNodes.Add(node);
+                if (node == targetNode)
                 {
-                    adjNode.G = newCostToNeighbour;
-                    adjNode.H = !adjNode.Expensive ? GetTraversalCost(adjNode, targetNode) :
-                        Mathf.RoundToInt(grid.MaxSize * .65f)
-                        + GetTraversalCost(adjNode, targetNode);
-                    adjNode.Parent = node;
-
-                    if (!openNodes.Contains(adjNode))
-                        openNodes.Add(adjNode);
-                    else
-                        openNodes.UpdateItem(adjNode);
-                    
+                    pathSuccess = true;
+                    break;
+                }
+                foreach (var adjNode in grid.GetAdjacentLocations(node))
+                {
+                    if (!adjNode.Walkable || closedNodes.Contains(adjNode))
+                        continue;
+                    int newCostToNeighbour = node.G + GetTraversalCost(node, adjNode);
+                    if (newCostToNeighbour < adjNode.G || !openNodes.Contains(adjNode))
+                    {
+                        adjNode.G = newCostToNeighbour;
+                        adjNode.H = !adjNode.Expensive
+                            ? GetTraversalCost(adjNode, targetNode)
+                            : Mathf.RoundToInt(grid.MaxSize * .65f)
+                              + GetTraversalCost(adjNode, targetNode);
+                        adjNode.Parent = node;
+                        if (!openNodes.Contains(adjNode))
+                            openNodes.Add(adjNode);
+                        else
+                            openNodes.UpdateItem(adjNode);
+                    }
                 }
             }
         }
+        yield return null;
+        if (pathSuccess)
+        {
+            waypoints = RetracePath(startNode, targetNode);
+        }
+        pathManager.FinishedProcessingPath(waypoints, pathSuccess);
     }
 
-    void RetracePath(Node startNode, Node endNode)
+    Vector3[] RetracePath(Node startNode, Node endNode)
     {
         List<Node> path = new List<Node>();
         Node currentNode = endNode;
@@ -74,8 +87,26 @@ public class PathFinder : MonoBehaviour
             path.Add(currentNode);
             currentNode = currentNode.Parent;
         }
-        path.Reverse();
-        grid.Path = path;
+        Vector3[] waypoints = SimplifyPath(path);
+        Array.Reverse(waypoints);
+        return waypoints;
+    }
+
+    Vector3[] SimplifyPath(List<Node> path)
+    {
+        List<Vector3> waypoints = new List<Vector3>();
+        Vector2 directionOld = Vector2.zero;
+
+        for (int i = 1; i < path.Count; i++)
+        {
+            Vector2 directionNew = new Vector2(path[i - 1].GridX - path[i].GridX, path[i - 1].GridY - path[i].GridY);
+            if (directionNew != directionOld)
+            {
+                waypoints.Add(path[i].WorldPosition);
+            }
+            directionOld = directionNew;
+        }
+        return waypoints.ToArray();
     }
     // Manhatten distance
     int GetTraversalCost(Node nodeA, Node nodeB)

@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class TargetMover : MonoBehaviour
 {
-    public LayerMask mask;
-    public Transform target;
-    Camera cam;
-    public bool onlyOnDoubleClick;
+    public LayerMask Mask;
+    public Transform Target;
+    Camera _cam;
+    public bool OnlyOnDoubleClick;
 
     public void Start()
     {
-        cam = Camera.main;
-        target = GetComponent<Transform>();
+        _cam = Camera.main;
+        Target = GetComponent<Transform>();
         useGUILayout = false;
     }
 
     public void OnGUI()
     {
-        if (onlyOnDoubleClick && cam != null && Event.current.type == EventType.MouseDown && Event.current.clickCount == 2)
+        if (OnlyOnDoubleClick && _cam != null && Event.current.type == EventType.MouseDown && Event.current.clickCount == 2)
         {
             UpdateTargetPosition();
         }
@@ -27,7 +27,7 @@ public class TargetMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!onlyOnDoubleClick && cam != null)
+        if (!OnlyOnDoubleClick && _cam != null)
         {
             UpdateTargetPosition();
         }
@@ -40,15 +40,15 @@ public class TargetMover : MonoBehaviour
 
         //Fire a ray through the scene at the mouse position and place the target where it hits
         RaycastHit hit;
-        if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, mask))
+        if (Physics.Raycast(_cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, Mask))
         {
             newPosition = hit.point;
             positionFound = true;
         }
 
-        if (positionFound && newPosition != target.position)
+        if (positionFound && newPosition != Target.position)
         {
-            target.position = newPosition;
+            Target.position = newPosition;
         }
     }
 }
