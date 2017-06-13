@@ -86,7 +86,7 @@ public class Grid : MonoBehaviour
             {
                 foreach (Node n in Path)
                 {
-                    Gizmos.color = Color.black;
+                    Gizmos.color = Color.blue;
                     Gizmos.DrawCube(n.WorldPosition, Vector3.one * (nodeDiameter - .1f));
                 }
             }
