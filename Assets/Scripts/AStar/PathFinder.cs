@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class PathFinder : MonoBehaviour
@@ -15,31 +16,29 @@ public class PathFinder : MonoBehaviour
 
     void Update()
     {
-        FindAStarPath(Seeker.position, Target.position);
+        if (Input.GetButtonDown("Jump"))
+        {
+            FindAStarPath(Seeker.position, Target.position);
+        }
     }
 
     public void FindAStarPath(Vector3 startPos, Vector3 targetPos)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         Node startNode = grid.GetNodeFromWorldPos(startPos);
         Node targetNode = grid.GetNodeFromWorldPos(targetPos);
-        List<Node> openNodes = new List<Node>();
+        Heap<Node> openNodes = new Heap<Node>(grid.MaxSize);
         HashSet<Node> closedNodes = new HashSet<Node>();
         openNodes.Add(startNode);
         while (openNodes.Count > 0)
         {
-            Node node = openNodes[0];
-            for (int i = 1; i < openNodes.Count; i++)
-            {
-                if (openNodes[i].F < node.F || openNodes[i].F == node.F)
-                {
-                    if (openNodes[i].H < node.H)
-                        node = openNodes[i];
-                }
-            }
-            openNodes.Remove(node);
+            Node node = openNodes.RemoveFirst();
             closedNodes.Add(node);
             if (node == targetNode)
             {
+                stopwatch.Stop();
+                print("Path found in " + stopwatch.ElapsedMilliseconds + " ms");
                 RetracePath(startNode, targetNode);
                 return;
             }
@@ -52,12 +51,15 @@ public class PathFinder : MonoBehaviour
                 {
                     adjNode.G = newCostToNeighbour;
                     adjNode.H = !adjNode.Expensive ? GetTraversalCost(adjNode, targetNode) :
-                        Mathf.RoundToInt(grid.GridWorldSize.x * grid.GridWorldSize.y * .65f)
+                        Mathf.RoundToInt(grid.MaxSize * .65f)
                         + GetTraversalCost(adjNode, targetNode);
                     adjNode.Parent = node;
 
                     if (!openNodes.Contains(adjNode))
                         openNodes.Add(adjNode);
+                    else
+                        openNodes.UpdateItem(adjNode);
+                    
                 }
             }
         }

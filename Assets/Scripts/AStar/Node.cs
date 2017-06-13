@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node
+public class Node : IHeapItem<Node>
 {
     public bool Walkable;
     public int G, H;
     public int GridX, GridY;
     public Vector3 WorldPosition;
     public bool Expensive;
-    private Node _parent;
-
+    public int HeapIndex { get; set; }
+    public Node Parent { get; set; }
     public Node(bool walkable, Vector3 worldPos, int gridx, int gridy, bool expensive)
     {
         Walkable = walkable;
@@ -27,13 +27,13 @@ public class Node
             return G + H;
         }
     }
-    public Node Parent
+    public int CompareTo(Node other)
     {
-        get { return _parent; }
-        set
+        int compare = F.CompareTo(other.F);
+        if (compare == 0)
         {
-            _parent = value;
-           // G = _parent.G + PathFinder.GetTraversalCost(this, _parent);
+            compare = H.CompareTo(other.H);
         }
+        return -compare;
     }
 }
