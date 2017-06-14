@@ -15,15 +15,7 @@ public class PathFinder : MonoBehaviour
         pathManager = GetComponent<PathManager>();
         grid = GetComponent<Grid>();
     }
-
-    //void Update()
-    //{
-    //    if (Input.GetButtonDown("Jump"))
-    //    {
-    //        FindAStarPath(Seeker.position, Target.position);
-    //    }
-    //}
-
+    
     public void StartFindAStarPath(Vector3 startPos, Vector3 targetPos)
     {
         StartCoroutine(FindAStarPath(startPos, targetPos));

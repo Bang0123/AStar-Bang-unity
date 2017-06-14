@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour, IObservers
 {
     public Transform Target;
     private Rigidbody _rb;
-    public float Speed = 2;
+    public float Speed = 2.5f;
     private Vector3[] path;
     private int TargetIndex;
     private TargetMover gobj;
@@ -14,8 +14,11 @@ public class PlayerController : MonoBehaviour, IObservers
     void Start()
     {
         gobj = GameObject.FindGameObjectWithTag("Target").GetComponent<TargetMover>();
-        gobj.registerObserver(this);
-        PathManager.RequestPath(transform.position, Target.position, OnPathFound);
+        if (gobj != null)
+        {
+            gobj.registerObserver(this);
+            PathManager.RequestPath(transform.position, Target.position, OnPathFound);
+        }
     }
 
     void OnDestroy()
@@ -62,7 +65,7 @@ public class PlayerController : MonoBehaviour, IObservers
         {
             for (int i = TargetIndex; i < path.Length; i++)
             {
-                Gizmos.color = Color.black;
+                Gizmos.color = Color.blue;
                 Gizmos.DrawCube(path[i], Vector3.one);
                 if (i == TargetIndex)
                 {
