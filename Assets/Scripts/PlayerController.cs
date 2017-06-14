@@ -2,24 +2,29 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IObservers
 {
     public Transform Target;
     private Rigidbody _rb;
     public float Speed = 2;
     private Vector3[] path;
     private int TargetIndex;
+    private TargetMover gobj;
 
     void Start()
     {
+        gobj = GameObject.FindGameObjectWithTag("Target").GetComponent<TargetMover>();
+        gobj.registerObserver(this);
         PathManager.RequestPath(transform.position, Target.position, OnPathFound);
     }
 
-    // Finder hele tiden en path dog har fejl tilsidst :p
-    //void FixedUpdate()
-    //{
-    //    PathManager.RequestPath(transform.position, Target.position, OnPathFound);
-    //}
+    void OnDestroy()
+    {
+        if (gobj != null)
+        {
+            gobj.removeObserver(this);
+        }
+    }
 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
@@ -69,5 +74,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnNotify()
+    {
+        PathManager.RequestPath(transform.position, Target.position, OnPathFound);
     }
 }
