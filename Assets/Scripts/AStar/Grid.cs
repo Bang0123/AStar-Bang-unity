@@ -69,6 +69,8 @@ public class Grid : MonoBehaviour
 
     public Node GetNodeFromWorldPos(Vector3 worldpos)
     {
+        // Virker fint hvis A* object er centeret fra Vector3(0,0,0)
+        //return grid[Mathf.RoundToInt(worldpos.x), Mathf.RoundToInt(worldpos.z)];
         float percentX = Mathf.Clamp01(worldpos.x / GridWorldSize.x + .5f);
         float percentY = Mathf.Clamp01(worldpos.z / GridWorldSize.y + .5f);
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
