@@ -10,9 +10,7 @@ namespace PathFinderTest
     {
         static void Main(string[] args)
         {
-            var game = new GameExample();
-            Console.WriteLine(game);
-
+            Console.WriteLine(new GameExample());
         }
     }
 }

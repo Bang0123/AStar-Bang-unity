@@ -48,10 +48,6 @@ namespace PathFinderTest
             return nodeMap;
         }
 
-        /// <summary>
-        /// Overridden tostring method
-        /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();

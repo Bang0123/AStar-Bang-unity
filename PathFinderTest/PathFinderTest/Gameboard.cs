@@ -28,24 +28,21 @@ namespace PathFinderTest
             EndNode = NodeMap[endNode.X, endNode.Y];
             StartNode.PrintState = NodeState.Start;
             EndNode.PrintState = NodeState.End;
-            Walls = wallsList;
-            AddWalls(wallsList);
+            Walls = AddWalls(wallsList);
         }
 
         /// <summary>
         /// Add walls to the nodemap
         /// </summary>
         /// <param name="walls">list of walls to be added</param>
-        private void AddWalls(IEnumerable<Node> walls)
+        private List<Node> AddWalls(IEnumerable<Node> walls)
         {
-            if (walls == null)
-            {
-                return;
-            }
-            foreach (var wall in walls)
+            if (walls == null) return;
+            return walls.Select((wall) =>
             {
                 NodeMap[wall.X, wall.Y].PrintState = NodeState.Wall;
-            }
+                return wall;
+            }).ToList();
         }
     }
 }
